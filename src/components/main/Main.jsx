@@ -3,34 +3,38 @@ import { useEffect, useState } from 'react';
 
 const Main = () => {
     const [frase, setFrase] = useState('');
+    const [randomParam, setRandomParam] = useState('');
   
-    useEffect(() => {
-      fetchFrase(setFrase);
+    useEffect(() => { 
+      fetchFrase(setFrase, setRandomParam);
     }, []);
   
     const handleClick = () => {
-      fetchFrase(setFrase);
+        console.log('CLICK');
+        fetchFrase(setFrase, setRandomParam);
     };
   
     return (
-      <StyledMainContainer>
-        <StyledCardContainer>
-          <StyledCardInfo>
-            <StyledCardTitle>Card Title</StyledCardTitle>
-            <StyledCardNumber>{frase.id}</StyledCardNumber>
-          </StyledCardInfo>
-          <StyledCardDescription>{frase}</StyledCardDescription>
-          <StyledCardButton onClick={handleClick}>Card Button</StyledCardButton>
-        </StyledCardContainer>
-      </StyledMainContainer>
-    );
-  };
+        <StyledMainContainer>
+            <StyledCardContainer>
+                <StyledCardInfo>
+                    <StyledCardTitle>Card Title</StyledCardTitle>
+                    <StyledCardNumber>{randomParam}</StyledCardNumber>
+                </StyledCardInfo>
+                <StyledCardDescription>{frase}</StyledCardDescription>
+                <StyledCardButton onClick={handleClick}>Card Button</StyledCardButton>
+            </StyledCardContainer>
+        </StyledMainContainer>
+        );
+    };
   
-  const fetchFrase = async (setFrase) => {
-      const randomParam = Math.floor(Math.random() * 100);
-      const response = await fetch(`https://api.adviceslip.com/advice?random=${randomParam}`);
-      const data = await response.json();
-      setFrase(data.slip.advice);
-  };
-  
-  export default Main;
+    const fetchFrase = async (setFrase, setRandomParam) => {
+        console.log('USE EFFECT');
+        const newRandomParam = Math.floor(Math.random() * 100).toString();
+        setRandomParam(newRandomParam);
+        const response = await fetch(`https://api.adviceslip.com/advice?random=${newRandomParam}`);
+        const data = await response.json();
+        setFrase(data.slip.advice);
+    };
+
+export default Main;
